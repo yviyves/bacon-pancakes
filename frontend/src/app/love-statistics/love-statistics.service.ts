@@ -1,34 +1,27 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { inject, Injectable, Signal } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import { Fight } from '../model/fight';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoveStatisticsService {
   httpClient = inject(HttpClient);
+  lastFight: Signal<string | undefined> = toSignal(
+    this.getFights().pipe(
+      map((fights: Fight[]) => fights[fights.length - 1]?.timestamp)
+    )
+  );
 
   getFights(): Observable<Fight[]> {
-    return of([
-      {
-        id: 1,
-        timestamp: '2024-01-15T10:30:00Z',
-      },
-    ]);
+    return this.httpClient.get<Fight[]>('http://localhost:3000/fights');
   }
 
-  addFight(selectedDate: string): void {
-    of({
-      id: 1,
+  addFight(selectedDate: string): Observable<Fight> {
+    return this.httpClient.post<Fight>('http://localhost:3000/fights', {
       timestamp: selectedDate,
-    }).subscribe({
-      next: () => {
-        console.log('Fight added successfully');
-      },
-      error: (error) => {
-        console.error('Error adding fight:', error);
-      },
     });
   }
 }
