@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { LoveStatistics } from './love-statistics/love-statistics';
+import { Background } from './background/background';
 
 @Component({
   selector: 'app-root',
-  imports: [LoveStatistics],
+  imports: [LoveStatistics, Background],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

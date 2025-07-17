@@ -1,0 +1,36 @@
+$base-color: green;
+$accent-color: brown;
+$neutral-color: white;
+
+@mixin generate-color-variants($color, $prefix) {
+  #{$prefix}-100: mix(white, $color, 80%);
+  #{$prefix}-200: mix(white, $color, 60%);
+  #{$prefix}-300: mix(white, $color, 40%);
+  #{$prefix}-400: mix(white, $color, 20%);
+  #{$prefix}-500: $color;
+  #{$prefix}-600: mix(black, $color, 20%);
+  #{$prefix}-700: mix(black, $color, 40%);
+  #{$prefix}-800: mix(black, $color, 60%);
+  #{$prefix}-900: mix(black, $color, 80%);
+}
+
+:root {
+  @include generate-color-variants($base-color, --base);
+  @include generate-color-variants($accent-color, --accent);
+}
+
+@mixin generate-bg-classes($prefix) {
+  @for $i from 1 through 9 {
+    $weight: $i * 100;
+    .bg-#{$prefix}-#{$weight} {
+      background-color: var(--#{$prefix}-#{$weight});
+    }
+  }
+}
+
+@include generate-bg-classes(base);
+@include generate-bg-classes(accent);
+
+.bg-neutral {
+  background-color: $neutral-color;
+}
