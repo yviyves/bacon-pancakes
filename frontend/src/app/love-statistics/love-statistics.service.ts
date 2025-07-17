@@ -21,11 +21,15 @@ export class LoveStatisticsService {
     );
   }
 
-  addFight(selectedDate: string): Observable<Fight> {
+  addFight(
+    selectedDate: string,
+    reconciledOnSameDay: boolean
+  ): Observable<Fight> {
     return this.httpClient.post<Fight>(
       'https://bacon-pancakes.onrender.com/fights',
       {
         timestamp: selectedDate,
+        reconciledOnSameDay: reconciledOnSameDay,
       }
     );
   }

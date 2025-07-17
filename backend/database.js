@@ -25,6 +25,11 @@ const Fight = sequelize.define("Fight", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  reconciledOnSameDay: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 });
 
 module.exports = { sequelize, Fight };

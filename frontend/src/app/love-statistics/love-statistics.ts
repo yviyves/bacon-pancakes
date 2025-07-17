@@ -28,13 +28,14 @@ export class LoveStatistics implements OnInit {
   refresh = new Subject<void>();
   loveStatisticsService = inject(LoveStatisticsService);
   todayDate = new Date().toISOString().split('T')[0];
+  reconciledOnSameDay = new FormControl(false);
 
   lastFight = toSignal(
     this.refresh.pipe(
       switchMap(() =>
         this.loveStatisticsService
           .getFights()
-          .pipe(map((fights) => fights[fights.length - 1]?.timestamp))
+          .pipe(map((fights) => fights[fights.length - 1]))
       )
     )
   );
@@ -45,7 +46,7 @@ export class LoveStatistics implements OnInit {
       return 0;
     }
     const today = new Date();
-    const lastFightDate = new Date(lastFight);
+    const lastFightDate = new Date(lastFight.timestamp);
     const diffTime = Math.abs(today.getTime() - lastFightDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays - 1;
@@ -69,7 +70,7 @@ export class LoveStatistics implements OnInit {
         this.renderer.addClass(element.nativeElement, 'animate');
       });
       this.loveStatisticsService
-        .addFight(this.selectedDate.value!)
+        .addFight(this.selectedDate.value!, this.reconciledOnSameDay.value!)
         .subscribe(() => {
           this.refresh.next();
         });

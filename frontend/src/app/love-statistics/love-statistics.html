@@ -1,6 +1,9 @@
 <h1 class="text-2xl font-bold">Love Statistics</h1>
 <span #animatedSpan class="animate"
-  >Date of last fight: {{ lastFight() | date : "dd.MM.yyyy" }}</span
+  >Date of last fight: {{ lastFight()?.timestamp | date : "dd.MM.yyyy" }}</span
+>
+<span #animatedSpan class="animate"
+  >Reconciled on same day: {{ lastFight()?.reconciledOnSameDay }}</span
 >
 <span #animatedSpan class="animate"
   >Days since last fight: {{ daysSinceLastFight() }}</span
@@ -17,6 +20,14 @@
   [max]="todayDate"
   class="border rounded p-2 animate cursor-pointer"
 />
+<span class="flex items-center gap-2">
+  <label for="reconciledOnSameDay">Reconciled on same day</label>
+  <input
+    type="checkbox"
+    id="reconciledOnSameDay"
+    [formControl]="reconciledOnSameDay"
+  />
+</span>
 <button
   type="button"
   [disabled]="selectedDate.invalid"
