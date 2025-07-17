@@ -16,12 +16,17 @@ export class LoveStatisticsService {
   );
 
   getFights(): Observable<Fight[]> {
-    return this.httpClient.get<Fight[]>('http://localhost:3000/fights');
+    return this.httpClient.get<Fight[]>(
+      'https://bacon-pancakes.onrender.com/fights'
+    );
   }
 
   addFight(selectedDate: string): Observable<Fight> {
-    return this.httpClient.post<Fight>('http://localhost:3000/fights', {
-      timestamp: selectedDate,
-    });
+    return this.httpClient.post<Fight>(
+      'https://bacon-pancakes.onrender.com/fights',
+      {
+        timestamp: selectedDate,
+      }
+    );
   }
 }
