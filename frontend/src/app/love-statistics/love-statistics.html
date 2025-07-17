@@ -1,7 +1,15 @@
-<span #spanElement class="animate"
+<h1 class="text-2xl font-bold">Love Statistics</h1>
+<span #animatedSpan class="animate"
   >Date of last fight: {{ lastFight() | date : "dd.MM.yyyy" }}</span
 >
-<span class="animate">Days since last fight: {{ daysSinceLastFight() }}</span>
+<span #animatedSpan class="animate"
+  >Days since last fight: {{ daysSinceLastFight() }}</span
+>
+<div
+  class="border-1 w-full border-dashed border-gray-400"
+  style="height: 1px"
+></div>
+<span class="font-bold:">Choose date of last fight</span>
 <input
   type="date"
   [formControl]="selectedDate"

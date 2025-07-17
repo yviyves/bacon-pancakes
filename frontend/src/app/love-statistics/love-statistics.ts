@@ -6,8 +6,9 @@ import {
   ElementRef,
   inject,
   OnInit,
+  QueryList,
   Renderer2,
-  ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,7 +24,7 @@ import { LoveStatisticsService } from './love-statistics.service';
   standalone: true,
 })
 export class LoveStatistics implements OnInit {
-  @ViewChild('spanElement', { static: true }) spanElement!: ElementRef;
+  @ViewChildren('animatedSpan') spanElements!: QueryList<ElementRef>;
   refresh = new Subject<void>();
   loveStatisticsService = inject(LoveStatisticsService);
   todayDate = new Date().toISOString().split('T')[0];
@@ -59,11 +60,14 @@ export class LoveStatistics implements OnInit {
   }
 
   onSubmit() {
-    const element = this.spanElement.nativeElement;
-    this.renderer.removeClass(element, 'animate');
+    this.spanElements.forEach((element) => {
+      this.renderer.removeClass(element.nativeElement, 'animate');
+    });
 
     setTimeout(() => {
-      this.renderer.addClass(element, 'animate');
+      this.spanElements.forEach((element) => {
+        this.renderer.addClass(element.nativeElement, 'animate');
+      });
       this.loveStatisticsService
         .addFight(this.selectedDate.value!)
         .subscribe(() => {
