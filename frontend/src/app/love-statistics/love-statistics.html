@@ -1,37 +1,63 @@
 <h1 class="text-2xl font-bold">Love Statistics</h1>
-<span #animatedSpan class="animate"
-  >Date of last fight: {{ lastFight()?.timestamp | date : "dd.MM.yyyy" }}</span
->
-<span #animatedSpan class="animate"
-  >Reconciled on same day: {{ lastFight()?.reconciledOnSameDay }}</span
->
-<span #animatedSpan class="animate"
-  >Days since last fight: {{ daysSinceLastFight() }}</span
->
 <div
   class="border-1 w-full border-dashed border-gray-400"
   style="height: 1px"
 ></div>
-<span class="font-bold:">Choose date of last fight</span>
-<input
-  type="date"
-  [formControl]="selectedDate"
-  placeholder="Select a date"
-  [max]="todayDate"
-  class="border rounded p-2 animate cursor-pointer"
-/>
-<span class="flex items-center gap-2">
-  <label for="reconciledOnSameDay">Reconciled on same day</label>
-  <input
-    type="checkbox"
-    id="reconciledOnSameDay"
-    [formControl]="reconciledOnSameDay"
-  />
-</span>
-<button
-  type="button"
-  (click)="onSubmit()"
-  class="bg-accent-500 text-white px-4 py-2 rounded cursor-pointer animate"
->
-  Submit
-</button>
+<section class="flex flex-col gap-2">
+  <h2 class="text-2xl font-bold">Last fight</h2>
+  <span #animatedSpan class="animate"
+    >Date of last fight: {{ lastFight().timestamp | date : "dd.MM.yyyy" }}</span
+  >
+  <span #animatedSpan class="animate"
+    >Reconciled on same day: {{ lastFight().reconciledOnSameDay }}</span
+  >
+  <span #animatedSpan class="animate"
+    >Days since last fight: {{ daysSinceLastFight() }}</span
+  >
+</section>
+<div
+  class="border-1 w-full border-dashed border-gray-400"
+  style="height: 1px"
+></div>
+<section class="flex flex-col gap-2">
+  <h2 class="text-2xl font-bold">History</h2>
+  <div class="flex flex-col gap-2">
+    @for (fight of lastFights(); track fight.id) {
+    <div class="flex gap-2">
+      <span>{{ fight.timestamp | date : "dd.MM.yyyy" }}</span>
+      <span> Reconciled on same day: {{ fight.reconciledOnSameDay }}</span>
+    </div>
+    }
+  </div>
+</section>
+<div
+  class="border-1 w-full border-dashed border-gray-400"
+  style="height: 1px"
+></div>
+<section class="flex flex-col gap-2">
+  <h2 class="text-2xl font-bold">Submit new fight</h2>
+  <form class="flex flex-col gap-3" [formGroup]="newFightForm">
+    <input
+      type="date"
+      formControlName="selectedDate"
+      placeholder="Select a date"
+      [max]="todayDate"
+      class="border rounded p-2 animate cursor-pointer"
+    />
+    <span class="flex items-center gap-2">
+      <label for="reconciledOnSameDay">Reconciled on same day</label>
+      <input
+        type="checkbox"
+        id="reconciledOnSameDay"
+        formControlName="reconciledOnSameDay"
+      />
+    </span>
+    <button
+      type="button"
+      (click)="onSubmit()"
+      class="bg-accent-500 text-white px-4 py-2 rounded cursor-pointer animate"
+    >
+      Submit
+    </button>
+  </form>
+</section>

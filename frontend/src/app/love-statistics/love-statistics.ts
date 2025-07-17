@@ -8,12 +8,19 @@ import {
   OnInit,
   QueryList,
   Renderer2,
+  Signal,
   ViewChildren,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { map, Subject, switchMap } from 'rxjs';
 import { LoveStatisticsService } from './love-statistics.service';
+import { Fight } from '../model/fight';
 
 @Component({
   selector: 'app-love-statistics',
@@ -28,19 +35,29 @@ export class LoveStatistics implements OnInit {
   refresh = new Subject<void>();
   loveStatisticsService = inject(LoveStatisticsService);
   todayDate = new Date().toISOString().split('T')[0];
-  reconciledOnSameDay = new FormControl(false);
 
-  lastFight = toSignal(
+  lastFights: Signal<Fight[]> = toSignal(
     this.refresh.pipe(
       switchMap(() =>
         this.loveStatisticsService
           .getFights()
-          .pipe(map((fights) => fights[fights.length - 1]))
+          .pipe(
+            map((fights) =>
+              fights.sort((a, b) => b.timestamp.localeCompare(a.timestamp))
+            )
+          )
       )
-    )
+    ),
+    {
+      initialValue: [
+        { id: 0, timestamp: '', reconciledOnSameDay: false },
+      ] as Fight[],
+    }
   );
 
-  daysSinceLastFight = computed(() => {
+  lastFight: Signal<Fight> = computed(() => this.lastFights()[0]);
+
+  daysSinceLastFight: Signal<number> = computed(() => {
     const lastFight = this.lastFight();
     if (!lastFight) {
       return 0;
@@ -52,7 +69,10 @@ export class LoveStatistics implements OnInit {
     return diffDays - 1;
   });
 
-  selectedDate = new FormControl('', [Validators.required]);
+  newFightForm = new FormGroup({
+    selectedDate: new FormControl('', [Validators.required]),
+    reconciledOnSameDay: new FormControl<boolean>(false, { nonNullable: true }),
+  });
 
   constructor(private renderer: Renderer2) {}
 
@@ -70,9 +90,13 @@ export class LoveStatistics implements OnInit {
         this.renderer.addClass(element.nativeElement, 'animate');
       });
       this.loveStatisticsService
-        .addFight(this.selectedDate.value!, this.reconciledOnSameDay.value!)
+        .addFight(
+          this.newFightForm.value.selectedDate!,
+          this.newFightForm.controls.reconciledOnSameDay.value
+        )
         .subscribe(() => {
           this.refresh.next();
+          this.newFightForm.reset();
         });
     }, 10);
   }

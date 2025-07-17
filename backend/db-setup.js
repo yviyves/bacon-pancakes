@@ -5,7 +5,7 @@ const { sequelize, Fight } = require("./database");
     await sequelize.authenticate();
     console.log("✅ Connection established.");
 
-    await sequelize.sync({ alter: true }); // or { force: true } for a full drop + recreate
+    await sequelize.sync({ force: true }); // or { force: true } for a full drop + recreate
     console.log("✅ All models were synchronized.");
 
     // Optionally: insert a test row
