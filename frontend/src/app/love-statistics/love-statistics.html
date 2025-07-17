@@ -6,35 +6,38 @@
 <section class="flex flex-col gap-2">
   <h2 class="text-2xl font-bold">Last fight</h2>
   <span #animatedSpan class="animate"
-    >Date of last fight: {{ lastFight().timestamp | date : "dd.MM.yyyy" }}</span
+    >Date of last fight:
+    <strong>{{ lastFight().timestamp | date : "dd.MM.yyyy" }}</strong></span
   >
   <span #animatedSpan class="animate"
-    >Reconciled on same day: {{ lastFight().reconciledOnSameDay }}</span
+    >Reconciled on same day:
+    <strong>{{ lastFight().reconciledOnSameDay }}</strong></span
   >
   <span #animatedSpan class="animate"
-    >Days since last fight: {{ daysSinceLastFight() }}</span
+    >Days since last fight: <strong>{{ daysSinceLastFight() }}</strong></span
   >
 </section>
 <div
   class="border-1 w-full border-dashed border-gray-400"
   style="height: 1px"
 ></div>
-<section class="flex flex-col gap-2">
+<section class="flex flex-col gap-2 w-full">
   <h2 class="text-2xl font-bold">History</h2>
-  <div class="flex flex-col gap-2">
-    @for (fight of lastFights(); track fight.id) {
-    <div class="flex gap-2">
-      <span>{{ fight.timestamp | date : "dd.MM.yyyy" }}</span>
-      <span> Reconciled on same day: {{ fight.reconciledOnSameDay }}</span>
-    </div>
-    }
+  <div class="max-h-[300px] w-full">
+    <canvas #canvas></canvas>
   </div>
+  <span
+    >Number of fights in last 30 days:
+    <strong>{{ numberOfFightsInLast30Days() }}</strong></span
+  >
 </section>
 <div
   class="border-1 w-full border-dashed border-gray-400"
   style="height: 1px"
 ></div>
-<section class="flex flex-col gap-2">
+<section
+  class="flex flex-col gap-2 w-full lg:w-1/2 transition-all duration-300"
+>
   <h2 class="text-2xl font-bold">Submit new fight</h2>
   <form class="flex flex-col gap-3" [formGroup]="newFightForm">
     <input
@@ -55,6 +58,7 @@
     <button
       type="button"
       (click)="onSubmit()"
+      [disabled]="newFightForm.invalid"
       class="bg-accent-500 text-white px-4 py-2 rounded cursor-pointer animate"
     >
       Submit
