@@ -25,21 +25,3 @@ app.post("/fights", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
-
-async function startServer() {
-  try {
-    await sequelize.authenticate();
-    console.log("Database connected successfully");
-
-    await sequelize.sync();
-    console.log("Database synchronized");
-
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.error("Unable to start server:", error);
-  }
-}
-
-startServer();
