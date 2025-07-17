@@ -1,2 +1,6 @@
 @import "tailwindcss";
 @import "./app/styles/colors.scss";
+
+body {
+  overflow-y: scroll;
+}
