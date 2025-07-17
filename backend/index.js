@@ -25,3 +25,7 @@ app.post("/fights", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
