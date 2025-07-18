@@ -1,0 +1,14 @@
+<section class="flex flex-col gap-2">
+  <h2 class="text-2xl font-bold">Last fight</h2>
+  <span #animatedSpan class="animate p-2 rounded-md bg-accent-100"
+    >Date of last fight:
+    <strong>{{ lastFight().timestamp | date : "dd.MM.yyyy" }}</strong></span
+  >
+  <span #animatedSpan class="animate p-2 rounded-md bg-accent-100"
+    >Reconciled on same day:
+    <strong>{{ lastFight().reconciledOnSameDay }}</strong></span
+  >
+  <span #animatedSpan class="animate p-2 rounded-md bg-accent-100"
+    >Days since last fight: <strong>{{ daysSinceLastFight() }}</strong></span
+  >
+</section>

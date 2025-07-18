@@ -1,5 +1,5 @@
 <section
-  class="flex flex-col gap-2 w-full lg:w-1/2 transition-all duration-300"
+  class="fadeInAnimation flex flex-col gap-2 w-full lg:w-1/2 transition-all duration-300"
 >
   <h2 class="text-2xl font-bold">Submit new fight</h2>
   <form class="flex flex-col gap-3" [formGroup]="newFightForm">
@@ -8,23 +8,28 @@
       formControlName="selectedDate"
       placeholder="Select a date"
       [max]="todayDate"
-      class="border rounded p-2 animate cursor-pointer"
+      class="input input-primary"
     />
-    <span class="flex items-center gap-2">
-      <label for="reconciledOnSameDay">Reconciled on same day</label>
+    <label class="label">
       <input
         type="checkbox"
-        id="reconciledOnSameDay"
         formControlName="reconciledOnSameDay"
+        class="checkbox checkbox-primary checkbox-sm"
       />
+      Reconciled on same day
+    </label>
+    <span class="flex gap-2">
+      <button
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="newFightForm.invalid"
+        class="btn btn-soft btn-primary"
+      >
+        Submit
+      </button>
+      <button type="button" (click)="onCancel()" class="btn btn-soft btn-error">
+        Cancel
+      </button>
     </span>
-    <button
-      type="button"
-      (click)="onSubmit()"
-      [disabled]="newFightForm.invalid"
-      class="bg-accent-500 text-white px-4 py-2 rounded cursor-pointer animate"
-    >
-      Submit
-    </button>
   </form>
 </section>

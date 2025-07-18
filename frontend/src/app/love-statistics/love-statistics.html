@@ -1,38 +1,15 @@
-<h1 class="text-2xl font-bold">Love Statistics</h1>
-<div
-  class="border-1 w-full border-dashed border-gray-400"
-  style="height: 1px"
-></div>
-<section class="flex flex-col gap-2">
-  <h2 class="text-2xl font-bold">Last fight</h2>
-  <span #animatedSpan class="animate"
-    >Date of last fight:
-    <strong>{{ lastFight().timestamp | date : "dd.MM.yyyy" }}</strong></span
-  >
-  <span #animatedSpan class="animate"
-    >Reconciled on same day:
-    <strong>{{ lastFight().reconciledOnSameDay }}</strong></span
-  >
-  <span #animatedSpan class="animate"
-    >Days since last fight: <strong>{{ daysSinceLastFight() }}</strong></span
-  >
-</section>
-<div
-  class="border-1 w-full border-dashed border-gray-400"
-  style="height: 1px"
-></div>
-<section class="flex flex-col gap-2 w-full">
-  <h2 class="text-2xl font-bold">History</h2>
-  <div class="w-full">
-    <canvas #canvas></canvas>
-  </div>
-  <span
-    >Number of fights in last 30 days:
-    <strong>{{ numberOfFightsInLast30Days() }}</strong></span
-  >
-</section>
-<div
-  class="border-1 w-full border-dashed border-gray-400"
-  style="height: 1px"
-></div>
-<app-new-fight (refresh)="refresh.next()"></app-new-fight>
+<div class="divider divider-error font-bold text-2xl">Love Statistics</div>
+<app-love-statistics-overview></app-love-statistics-overview>
+<div class="divider"></div>
+<app-love-statistics-history></app-love-statistics-history>
+<div class="divider"></div>
+@if(!showNewFightForm()) {
+<button
+  class="fadeInAnimation btn btn-soft"
+  (click)="showNewFightForm.set(true)"
+>
+  add new fight
+</button>
+} @if(showNewFightForm()) {
+<app-new-fight></app-new-fight>
+}

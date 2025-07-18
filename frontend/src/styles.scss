@@ -1,6 +1,26 @@
 @import "tailwindcss";
 @import "./app/styles/colors.scss";
 
+html,
 body {
-  overflow-y: scroll;
+  background-color: var(--base-100);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.fadeInAnimation {
+  animation: fade-in 0.25s ease-in-out forwards;
+  opacity: 0;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

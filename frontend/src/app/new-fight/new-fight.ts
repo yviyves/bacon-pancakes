@@ -11,7 +11,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { LoveStatisticsService } from '../love-statistics/love-statistics.service';
+import { LoveStatisticsService } from '../core/injectables/love-statistics.service';
+import { GlobalRefreshToken } from '../core/injectables/refresh.token';
 
 @Component({
   selector: 'app-new-fight',
@@ -24,7 +25,7 @@ import { LoveStatisticsService } from '../love-statistics/love-statistics.servic
 export class NewFightComponent {
   todayDate = new Date().toISOString().split('T')[0];
   loveStatisticsService = inject(LoveStatisticsService);
-  @Output() refresh = new EventEmitter<void>();
+  refreshToken = inject(GlobalRefreshToken);
 
   newFightForm = new FormGroup({
     selectedDate: new FormControl('', [Validators.required]),
@@ -39,9 +40,14 @@ export class NewFightComponent {
           this.newFightForm.controls.reconciledOnSameDay.value
         )
         .subscribe(() => {
-          this.refresh.next();
+          this.refreshToken.next();
           this.newFightForm.reset();
         });
     }, 10);
+  }
+
+  onCancel() {
+    this.newFightForm.reset();
+    this.refreshToken.next();
   }
 }

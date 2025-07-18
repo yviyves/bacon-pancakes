@@ -3,7 +3,7 @@ $accent-color: red;
 $neutral-color: white;
 
 @mixin generate-color-variants($color, $prefix) {
-  #{$prefix}-100: mix(white, $color, 80%);
+  #{$prefix}-100: mix(white, $color, 90%);
   #{$prefix}-200: mix(white, $color, 60%);
   #{$prefix}-300: mix(white, $color, 40%);
   #{$prefix}-400: mix(white, $color, 20%);

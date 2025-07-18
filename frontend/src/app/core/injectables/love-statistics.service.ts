@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, Signal } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { Fight } from '../model/fight';
+import { Fight } from '../../model/fight';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
