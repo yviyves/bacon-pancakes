@@ -15,20 +15,16 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { map, Subject, switchMap } from 'rxjs';
-import { LoveStatisticsService } from './love-statistics.service';
-import { Fight } from '../model/fight';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Chart } from 'chart.js/auto';
+import { map, Subject, switchMap } from 'rxjs';
+import { Fight } from '../model/fight';
+import { NewFightComponent } from '../new-fight/new-fight';
+import { LoveStatisticsService } from './love-statistics.service';
 
 @Component({
   selector: 'app-love-statistics',
-  imports: [ReactiveFormsModule, DatePipe],
+  imports: [ReactiveFormsModule, DatePipe, NewFightComponent],
   templateUrl: './love-statistics.html',
   styleUrl: './love-statistics.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +35,6 @@ export class LoveStatistics implements OnInit, AfterViewInit {
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
   refresh = new Subject<void>();
   loveStatisticsService = inject(LoveStatisticsService);
-  todayDate = new Date().toISOString().split('T')[0];
 
   private chartInstance: Chart | null = null;
 
@@ -86,12 +81,6 @@ export class LoveStatistics implements OnInit, AfterViewInit {
     });
     return last30Days.length;
   });
-
-  newFightForm = new FormGroup({
-    selectedDate: new FormControl('', [Validators.required]),
-    reconciledOnSameDay: new FormControl<boolean>(false, { nonNullable: true }),
-  });
-
   viewFinished = false;
 
   constructor(private renderer: Renderer2) {
@@ -175,24 +164,13 @@ export class LoveStatistics implements OnInit, AfterViewInit {
     });
   }
 
-  onSubmit() {
-    this.spanElements.forEach((element) => {
-      this.renderer.removeClass(element.nativeElement, 'animate');
+  onRefresh() {
+    this.refresh.next();
+    this.spanElements.forEach((span) => {
+      span.nativeElement.classList.remove('animate');
+      setTimeout(() => {
+        span.nativeElement.classList.add('animate');
+      }, 10);
     });
-
-    setTimeout(() => {
-      this.spanElements.forEach((element) => {
-        this.renderer.addClass(element.nativeElement, 'animate');
-      });
-      this.loveStatisticsService
-        .addFight(
-          this.newFightForm.value.selectedDate!,
-          this.newFightForm.controls.reconciledOnSameDay.value
-        )
-        .subscribe(() => {
-          this.refresh.next();
-          this.newFightForm.reset();
-        });
-    }, 10);
   }
 }
